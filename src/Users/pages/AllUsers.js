@@ -3,9 +3,9 @@ import UserList from "../components/UserList";
 const AllUsers = () => {
   const UserData = [
     {
-      id: "u1",
+      id: "u2",
       name: "User One",
-      places: 3,
+      places: 1,
     },
   ];
   return <UserList users={UserData} />;

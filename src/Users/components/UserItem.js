@@ -1,13 +1,18 @@
 import { Card } from "react-bootstrap";
+import { Link } from "react-router";
 
 const UserItem = ({ id, name, places }) => {
   return (
-    <Card bg="secondary" text="white" style={{ width: "18rem" }}>
-      <Card.Body>
-        <Card.Title>{name}</Card.Title>
-        <Card.Text>Places: {places}</Card.Text>
-      </Card.Body>
-    </Card>
+    <Link to={`/${id}/place`}>
+      <Card bg="secondary" text="white" style={{ width: "18rem" }}>
+        <Card.Body>
+          <Card.Title>{name}</Card.Title>
+          <Card.Text>
+            {places} {places === 1 ? "Place" : "Places"}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Link>
   );
 };
 
