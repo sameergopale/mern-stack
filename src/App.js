@@ -3,6 +3,7 @@ import AllUsers from "./Users/pages/AllUsers";
 import MyPlace from "./Places/pages/MyPlace";
 import NewPlace from "./Places/pages/NewPlace";
 import DefaultLayout from "./layout/DefaultLayout";
+import Auth from "./Users/pages/Auth";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
             <Route index element={<AllUsers />} />
             <Route path="/:userId/place" element={<MyPlace />} />
             <Route path="/place/new" element={<NewPlace />} />
+            <Route path="/authenticate" element={<Auth />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

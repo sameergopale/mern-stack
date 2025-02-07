@@ -32,8 +32,8 @@ const MyPlace = () => {
     },
   ];
   return (
-    <Row className="justify-content-center">
-      <Col xs={6}>
+    <Row>
+      <Col lg={{ span: 6, offset: 3 }}>
         <PlaceList lists={placesList} />;
       </Col>
     </Row>

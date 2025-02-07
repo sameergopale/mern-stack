@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const UserItem = ({ id, name, places }) => {
   return (
     <Link to={`/${id}/place`} className="text-decoration-none">
-      <Card bg="secondary" text="white" style={{ width: "18rem" }}>
+      <Card bg="secondary" text="white">
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>

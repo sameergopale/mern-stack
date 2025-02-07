@@ -18,7 +18,7 @@ const Header = () => {
             <NavLink className="nav-link" to="/place/new">
               New Places
             </NavLink>
-            <NavLink className="nav-link" to="/auth">
+            <NavLink className="nav-link" to="/authenticate">
               Authentication
             </NavLink>
           </Nav>
