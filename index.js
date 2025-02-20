@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
 const app = express();
 
 const placeRoutes = require("./routes/places-route");
@@ -24,4 +26,13 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An internal server error" });
 });
 
-app.listen(5000);
+mongoose
+  .connect(
+    `mongodb+srv://user:PsKkY83rxRhyoPRj@cluster0.mspzh.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0`
+  )
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((error) => {
+    console.log("Connection to the database failed");
+  });
