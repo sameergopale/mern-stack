@@ -53,7 +53,7 @@ const signup = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid input data", 422));
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   // const isEmail = DUMMY_DATA.find((u) => u.email === email);
   let isEmail;
@@ -78,7 +78,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    places,
+    places: [],
   });
 
   try {
