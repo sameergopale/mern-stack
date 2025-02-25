@@ -2,6 +2,8 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import api from "../../api/axios";
+
 const SignupValidationSchema = Yup.object().shape({
   name: Yup.string().required(),
   email: Yup.string().required().email(),
@@ -15,8 +17,9 @@ const SignupForm = () => {
   } = useForm({
     resolver: yupResolver(SignupValidationSchema),
   });
-  const SignupFormHandler = (data) => {
-    console.log("Signup data", data);
+  const SignupFormHandler = async (data) => {
+    const res = await api.post("/users/signup", data);
+    console.log(res);
   };
   return (
     <div>
