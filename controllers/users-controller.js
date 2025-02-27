@@ -45,7 +45,12 @@ const login = async (req, res, next) => {
     return next(new HttpError("Invalid User", 422));
   }
 
-  res.status(200).json({ message: "login successfull" });
+  res
+    .status(200)
+    .json({
+      message: "login successfull",
+      user: existingEmail.toObject({ getters: true }),
+    });
 };
 
 const signup = async (req, res, next) => {
