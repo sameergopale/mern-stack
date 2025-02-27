@@ -2,11 +2,12 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import api from "../../api/axios";
-import { useContext, useState } from "react";
+import Loading from "../../sharedComponents/Loading";
+import { useContext, useEffect } from "react";
 import ErrorModal from "../../sharedComponents/ErrorModal";
 import { AuthContext } from "../../context/auth-context";
 import { useNavigate } from "react-router";
+import useHttpClient from "../../hooks/useHttpClient";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().required().email(),
@@ -16,7 +17,7 @@ const loginValidationSchema = Yup.object().shape({
 const LoginForm = () => {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
-  const [error, setError] = useState(false);
+  const { sendRequest, isLoading, error, clearError, data } = useHttpClient();
   const {
     register,
     handleSubmit,
@@ -24,21 +25,23 @@ const LoginForm = () => {
   } = useForm({
     resolver: yupResolver(loginValidationSchema),
   });
-  const loginFormHandler = async (data) => {
-    try {
-      const res = await api.post("/users/login", data);
-      if (res.status > 400) {
-        throw new Error(res.message);
-      }
-      auth.login(res.data.user.id);
-      navigate("/");
-    } catch (error) {
-      setError(error.response.data || "Something went wrong.");
-    }
+  const loginFormHandler = (userData) => {
+    sendRequest({
+      url: "/users/login",
+      method: "POST",
+      data: userData,
+    });
   };
+  useEffect(() => {
+    if (data) {
+      auth.login(data.user.id);
+      navigate("/");
+    }
+  }, [data, auth, navigate]);
   return (
     <div>
-      <ErrorModal error={error} clearError={() => setError(null)} />
+      {isLoading && <Loading />}
+      <ErrorModal error={error} clearError={clearError} />
       <h4>Login Form</h4>
       <Form onSubmit={handleSubmit(loginFormHandler)}>
         <Form.Group className="mb-3">

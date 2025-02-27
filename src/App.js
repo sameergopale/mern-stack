@@ -26,7 +26,7 @@ const App = () => {
       <>
         <Route path="/" element={<DefaultLayout />}>
           <Route index element={<AllUsers />} />
-          <Route path="/:userId/place" element={<MyPlace />} />
+          <Route path="/user/:userId" element={<MyPlace />} />
           <Route path="/place/new" element={<NewPlace />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />

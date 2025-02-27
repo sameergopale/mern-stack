@@ -2,10 +2,9 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import api from "../../api/axios";
 import ErrorModal from "../../sharedComponents/ErrorModal";
-import { useState } from "react";
 import Loading from "../../sharedComponents/Loading";
+import useHttpClient from "../../hooks/useHttpClient";
 
 const SignupValidationSchema = Yup.object().shape({
   name: Yup.string().required(),
@@ -13,9 +12,7 @@ const SignupValidationSchema = Yup.object().shape({
   password: Yup.string().required().min(5),
 });
 const SignupForm = () => {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsloading] = useState(false);
+  const { sendRequest, isLoading, error, data, clearError } = useHttpClient();
   const {
     register,
     handleSubmit,
@@ -23,25 +20,17 @@ const SignupForm = () => {
   } = useForm({
     resolver: yupResolver(SignupValidationSchema),
   });
-  const SignupFormHandler = async (data) => {
-    try {
-      setIsloading(true);
-      const res = await api.post("/users/signup", data);
-      setIsloading(false);
-      if (res.status > 400) {
-        throw new Error(res.message);
-      }
-      setUser(res.data.user);
-    } catch (error) {
-      setIsloading(false);
-      setError(error.response.data || "Something went wrong.");
-      setUser(null);
-    }
+  const SignupFormHandler = () => {
+    sendRequest({
+      url: "/users/signup",
+      method: "POST",
+      data,
+    });
   };
   return (
     <div>
       {isLoading && <Loading />}
-      <ErrorModal error={error} clearError={() => setError(null)} />
+      <ErrorModal error={error} clearError={clearError} />
       <h4>Sign Up Form</h4>
       <Form onSubmit={handleSubmit(SignupFormHandler)}>
         <Form.Group className="mb-3">
@@ -78,7 +67,7 @@ const SignupForm = () => {
             {errors?.password?.message}
           </Form.Control.Feedback>
         </Form.Group>
-        {user && <p>Signup successfull Please switch to login</p>}
+        {data?.user && <p>Signup successfull Please switch to login</p>}
         <Button type="submit">Sign Up</Button>
       </Form>
     </div>
