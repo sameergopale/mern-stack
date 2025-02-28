@@ -16,7 +16,7 @@ const Header = () => {
               All Users
             </NavLink>
             {auth.isLoggedIn && (
-              <NavLink className="nav-link" to="/u1/place">
+              <NavLink className="nav-link" to={`/user/${auth.userId}`}>
                 My Place
               </NavLink>
             )}

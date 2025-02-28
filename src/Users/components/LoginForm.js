@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Loading from "../../sharedComponents/Loading";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import ErrorModal from "../../sharedComponents/ErrorModal";
 import { AuthContext } from "../../context/auth-context";
 import { useNavigate } from "react-router";
@@ -17,7 +17,7 @@ const loginValidationSchema = Yup.object().shape({
 const LoginForm = () => {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
-  const { sendRequest, isLoading, error, clearError, data } = useHttpClient();
+  const { sendRequest, isLoading, error, clearError } = useHttpClient();
   const {
     register,
     handleSubmit,
@@ -25,19 +25,18 @@ const LoginForm = () => {
   } = useForm({
     resolver: yupResolver(loginValidationSchema),
   });
-  const loginFormHandler = (userData) => {
-    sendRequest({
-      url: "/users/login",
-      method: "POST",
-      data: userData,
-    });
-  };
-  useEffect(() => {
-    if (data) {
-      auth.login(data.user.id);
+  const loginFormHandler = async (userData) => {
+    try {
+      const responseData = await sendRequest({
+        url: "/users/login",
+        method: "POST",
+        data: userData,
+      });
+      auth.login(responseData.user.id);
       navigate("/");
-    }
-  }, [data, auth, navigate]);
+    } catch (error) {}
+  };
+
   return (
     <div>
       {isLoading && <Loading />}

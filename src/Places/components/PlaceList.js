@@ -1,4 +1,3 @@
-import { useParams } from "react-router";
 import PlaceItem from "./PlaceItem";
 
 const PlaceList = ({ lists }) => {

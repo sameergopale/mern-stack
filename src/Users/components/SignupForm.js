@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +13,8 @@ const SignupValidationSchema = Yup.object().shape({
   password: Yup.string().required().min(5),
 });
 const SignupForm = () => {
-  const { sendRequest, isLoading, error, data, clearError } = useHttpClient();
+  const [user, setUser] = useState();
+  const { sendRequest, isLoading, error, clearError } = useHttpClient();
   const {
     register,
     handleSubmit,
@@ -20,12 +22,15 @@ const SignupForm = () => {
   } = useForm({
     resolver: yupResolver(SignupValidationSchema),
   });
-  const SignupFormHandler = () => {
-    sendRequest({
-      url: "/users/signup",
-      method: "POST",
-      data,
-    });
+  const SignupFormHandler = async (formData) => {
+    try {
+      const responseData = await sendRequest({
+        url: "/users/signup",
+        method: "POST",
+        data: formData,
+      });
+      setUser(responseData.user);
+    } catch (error) {}
   };
   return (
     <div>
@@ -67,7 +72,7 @@ const SignupForm = () => {
             {errors?.password?.message}
           </Form.Control.Feedback>
         </Form.Group>
-        {data?.user && <p>Signup successfull Please switch to login</p>}
+        {user && <p>Signup successfull Please switch to login</p>}
         <Button type="submit">Sign Up</Button>
       </Form>
     </div>
